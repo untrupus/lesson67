@@ -24,7 +24,7 @@ const Calculator = () => {
         if (calculator.length >= 20) {
             setDisabled(true);
         }
-    },[calculator.length]);
+    }, [calculator.length]);
 
 
     const addSymbol = (symbol) => dispatch({type: "ADD_SYMBOL", value: symbol});
@@ -32,7 +32,11 @@ const Calculator = () => {
         dispatch({type: "CLEAR"});
         setDisabled(false);
     };
-    const equal = () => dispatch({type: "EQUAL"});
+    const equal = () => {
+        if (calculator.length !== 0) {
+            dispatch({type: "EQUAL"});
+        }
+    };
 
     return (
         <div className="Calculator">
@@ -43,12 +47,14 @@ const Calculator = () => {
                     className="clear"
                     type="button"
                     onClick={equal}
-                >=</button>
+                >=
+                </button>
                 <button
                     type="button"
                     className="clear"
                     onClick={clear}
-                >clear</button>
+                >clear
+                </button>
 
             </div>
         </div>
