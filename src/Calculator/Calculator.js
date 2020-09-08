@@ -1,11 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import './Calculator.css';
 
 const Calculator = () => {
-    const [disabled, setDisabled] = useState(false);
-
     const buttons = ['7', '8', '9', '+', '-', '4', '5', '6', '/', '*', '1', '2', '3', '0', '.'];
+
+    const calculator = useSelector(state => state.calculator);
+    const dispatch = useDispatch();
+
+    const addSymbol = (symbol) => dispatch({type: "ADD_SYMBOL", value: symbol});
+    const clear = () => dispatch({type: "CLEAR"});
+    const equal = () => {
+        if (calculator.length !== 0) {
+            dispatch({type: "EQUAL"});
+        }
+    };
+    const clearOnce = () => {
+            dispatch({type: "CLEAR_ONCE"});
+    };
+
+    const radical = () => {
+        dispatch({type: "RADICAL"});
+    };
 
     const calcButtons = buttons.map(btn => {
         return (
@@ -14,28 +30,12 @@ const Calculator = () => {
                 className="btn"
                 key={btn}
                 onClick={() => addSymbol(btn)}
-                disabled={disabled}
             >{btn}</button>
         )
     });
-    const calculator = useSelector(state => state.calculator);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        if (calculator.length >= 20) {
-            setDisabled(true);
-        }
-    }, [calculator.length]);
 
-
-    const addSymbol = (symbol) => dispatch({type: "ADD_SYMBOL", value: symbol});
-    const clear = () => {
-        dispatch({type: "CLEAR"});
-        setDisabled(false);
-    };
-    const equal = () => {
-        if (calculator.length !== 0) {
-            dispatch({type: "EQUAL"});
-        }
+    const percent = () => {
+        dispatch({type: "PERCENT"});
     };
 
     return (
@@ -43,6 +43,12 @@ const Calculator = () => {
             <div className="display">{calculator}</div>
             <div className="buttons">
                 {calcButtons}
+                <button
+                    type="button"
+                    className="clear"
+                    onClick={clear}
+                >c
+                </button>
                 <button
                     className="clear"
                     type="button"
@@ -52,10 +58,21 @@ const Calculator = () => {
                 <button
                     type="button"
                     className="clear"
-                    onClick={clear}
-                >clear
+                    onClick={clearOnce}
+                >&lt;
                 </button>
-
+                <button
+                    type="button"
+                    className="clear"
+                    onClick={radical}
+                >&#8730;
+                </button>
+                <button
+                    type="button"
+                    className="clear"
+                    onClick={percent}
+                >%
+                </button>
             </div>
         </div>
     );
